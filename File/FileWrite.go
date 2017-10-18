@@ -12,7 +12,7 @@ func WriteIntoFile(str string)  {
 	var fileName string = strconv.Itoa(now.Hour()) + "_" + strconv.Itoa(now.Minute()) + "_" + strconv.Itoa(now.Second()) + ".csv"
 	fo, err := os.Create(fileName)
 	if err != nil {
-		panic(err)
+		println(err)
 	}
 	defer fo.Close()
 	fo.WriteString(str)
