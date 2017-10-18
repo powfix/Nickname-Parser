@@ -13,19 +13,13 @@ func main() {
 	Runtime.GOMAXPROCS(Runtime.NumCPU())
 	Console.Printf("※ CPU(%d), GoLotine(%d)\n", Runtime.NumCPU(), Runtime.NumGoroutine())
 	
-	//Console.Println("[Nicname Parser]")
-	//Console.Print("사이트 주소(쉼표로 구분) : ")
-	//var inputData string
-	//Console.Scan(&inputData)
-
-	var i, cnt, taskLimit uint = 0, 0, 4
+	var totalCount, i, cnt, taskLimit uint = 0, 0, 0, 4
 	var wait Sync.WaitGroup
 	for i = 1; i < 120; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
-			//tmp := Parser.GetNickName(Parser.GetHtmlBody("https://sir.kr/qa/p" + Strconv.Itoa(int(i)) + "?unanswered"))
 			tmp := Parser.GetNickName(Parser.GetHtmlBody("https://sir.kr/talk/p" + Strconv.Itoa(int(i))))
 			resultData.Append(&tmp)
 		}()
@@ -33,10 +27,10 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 	for i = 1; i < 4758; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
@@ -47,10 +41,10 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 	for i = 1; i < 2626; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
@@ -62,10 +56,10 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 	for i = 1; i < 403; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
@@ -76,10 +70,10 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 	for i = 1; i < 8; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
@@ -90,10 +84,10 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 	for i = 1; i < 91; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
@@ -104,10 +98,10 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 	for i = 1; i < 457; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
@@ -118,10 +112,10 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 	for i = 1; i < 20; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
@@ -132,10 +126,10 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 	for i = 1; i < 27; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
@@ -146,11 +140,11 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 
 	for i = 1; i < 1021; i++ {
-		cnt++
+		cnt++; totalCount++
 		wait.Add(1)
 		go func() {
 			defer wait.Done()
@@ -161,11 +155,13 @@ func main() {
 			wait.Wait()
 			cnt = 0
 		}
-		Console.Printf("# Go routine start : %04d\n", i)
+		Console.Printf("# Go routine start : %04d\n", totalCount)
 	}
 
 	Console.Println("※ 작업이 완료되었습니다")
+	Console.Print("※ 중복데이터 삭제중......")
 	resultData.RemoveDuplicate()
+	Console.Println("OK")
 	Parser.PrintResult(&resultData)
 	FIle.WriteIntoFile(FIle.SliceStringToCsvString(resultData.GetResult()))
 }
