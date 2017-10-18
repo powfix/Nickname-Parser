@@ -17,42 +17,41 @@ type Result interface {
 	GetIncludeCount() int		// 정규식 조건에서 포함된 닉네임 카운트
 	GetExcludeCount() int		// 정규식 조건에서 제외된 닉네임 카운트
 	GetItemCount() int			// 실제 닉네임 요소 카운트
-	append()					// 슬라이스 추가
+	Append()					// 슬라이스 추가
 }
-func (resultData ResultData) GetResult() []string {
+func (resultData *ResultData) GetResult() []string {
 	return resultData.result
 }
-func (resultData ResultData) GetTotalCount() int {
+func (resultData *ResultData) GetTotalCount() int {
 	return resultData.totalCount
 }
-func (resultData ResultData) GetIncludeCount() int {
+func (resultData *ResultData) GetIncludeCount() int {
 	return resultData.includeCount
 }
-func (resultData ResultData) GetExcludeCount() int {
+func (resultData *ResultData) GetExcludeCount() int {
 	return resultData.excludeCount
 }
-func (resultData ResultData) GetItemCount() int {
+func (resultData *ResultData) GetItemCount() int {
 	return len(resultData.result)
 }
-func (resultData ResultData) append(data ResultData) ResultData {
+func (resultData *ResultData) Append(data *ResultData) *ResultData {
 	resultData.result = append(resultData.result, data.result...)
 	resultData.totalCount += data.totalCount
 	resultData.includeCount += data.includeCount
 	resultData.excludeCount += data.excludeCount
 	return resultData
 }
-func (resultData ResultData) RemoveDuplicate() ResultData {
+func (resultData *ResultData) RemoveDuplicate() *ResultData {
 	resultData.result = removeDuplicates(resultData.result)
 	return resultData
 }
-
-var TresultData = ResultData{}
 
 func PrintResult(resultData *ResultData) {
 	for i, text := range resultData.result {
 		Console.Printf("%03d %s\n", i, text) // Console 표시 ex) "27 은하수"
 	}
-	Console.Printf("※ 결괏값 : 전체(%d), 추가(%d), 정규식 제외(%d), 중복 제외(%d)\n\n", resultData.GetTotalCount(), resultData.GetIncludeCount(),resultData.GetExcludeCount(), resultData.includeCount - len(resultData.result))
+	Console.Printf("※ 결괏값 : 전체(%d), 추가(%d), 정규식 제외(%d), 중복 제외(%d)\n", resultData.GetTotalCount(), resultData.GetIncludeCount(),resultData.GetExcludeCount(), resultData.includeCount - len(resultData.result))
+	Console.Printf("※ 유효한 닉네임 : %d개\n\n", len(resultData.result))
 }
 
 func GetHtmlBody(url string) *HTML.Node {
@@ -93,8 +92,6 @@ func GetNickName(root *HTML.Node) ResultData {
 		}
 		resultData.totalCount++
 	}
-	TresultData.append(resultData)				// 전역변수에 추가
-	PrintResult(&resultData)
 	/** 코드 퍼포먼스를 위해 중복제거(removeDuplicates)는 마지막에 실행하도록 한다 */
 	return resultData
 }
