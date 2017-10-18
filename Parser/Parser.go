@@ -14,8 +14,10 @@ type ResultData struct {							// 결괏값 구조체
 type Result interface {
 	GetResult() []string		// 닉네임 배열
 	GetTotalCount() int			// 전체 닉네임 카운트
-	GetIncludeCount() int		// 포함된 닉네임 카운트
-	GetExcludeCount() int		// 제외된 닉네임 카운트
+	GetIncludeCount() int		// 정규식 조건에서 포함된 닉네임 카운트
+	GetExcludeCount() int		// 정규식 조건에서 제외된 닉네임 카운트
+	GetItemCount() int			// 실제 닉네임 요소 카운트
+	append()					// 슬라이스 추가
 }
 func (resultData ResultData) GetResult() []string {
 	return resultData.result
@@ -29,12 +31,28 @@ func (resultData ResultData) GetIncludeCount() int {
 func (resultData ResultData) GetExcludeCount() int {
 	return resultData.excludeCount
 }
+func (resultData ResultData) GetItemCount() int {
+	return len(resultData.result)
+}
+func (resultData ResultData) append(data ResultData) ResultData {
+	resultData.result = append(resultData.result, data.result...)
+	resultData.totalCount += data.totalCount
+	resultData.includeCount += data.includeCount
+	resultData.excludeCount += data.excludeCount
+	return resultData
+}
+func (resultData ResultData) RemoveDuplicate() ResultData {
+	resultData.result = removeDuplicates(resultData.result)
+	return resultData
+}
 
-func printResult(resultData *ResultData) {
+var TresultData = ResultData{}
+
+func PrintResult(resultData *ResultData) {
 	for i, text := range resultData.result {
-		Console.Printf("%03d %s\n", i, text) // Console 표시 ex) "0 민쯩먼저깔게요 (member)"
+		Console.Printf("%03d %s\n", i, text) // Console 표시 ex) "27 은하수"
 	}
-	Console.Printf("※ 결괏값 : 전체(%d), 추가(%d), 정규식 제외(%d), 중복 제외(%d)\n", resultData.GetTotalCount(), resultData.GetIncludeCount(),resultData.GetExcludeCount(), resultData.includeCount - len(resultData.result))
+	Console.Printf("※ 결괏값 : 전체(%d), 추가(%d), 정규식 제외(%d), 중복 제외(%d)\n\n", resultData.GetTotalCount(), resultData.GetIncludeCount(),resultData.GetExcludeCount(), resultData.includeCount - len(resultData.result))
 }
 
 func GetHtmlBody(url string) *HTML.Node {
@@ -62,22 +80,22 @@ func GetNickName(root *HTML.Node) ResultData {
 
 	/** Count reset */
 	var resultData = ResultData{totalCount: 0, includeCount: 0, excludeCount: 0}
-	var tmp []string
 	for _, article := range articles {
 		text := Scrape.Text(article)
 		hasKorean, _ := Regexp.MatchString("[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]", text)		// 한글이 포함되어 있는가
 		hasEnglish, _ := Regexp.MatchString("[a-z A-Z]", text)					// 영문이 포함되어 있는가
 		hasNumber, _ := Regexp.MatchString("[0-9]", text)						// 숫자가 포함되어 있는가
 		if hasKorean && !hasEnglish && !hasNumber {										// 한글이 포함되어 있고 영문과 숫자가 포함되어 있지 않을 경우
-			tmp = append(tmp, Scrape.Text(article))
+			resultData.result = append(resultData.result, Scrape.Text(article))			// ResultData(Local) 변수의 슬라이스에 추가
 			resultData.includeCount++
 		} else {
 			resultData.excludeCount++
 		}
 		resultData.totalCount++
 	}
-	resultData.result = removeDuplicates(tmp) // 중복 데이터 제거
-	printResult(&resultData)
+	TresultData.append(resultData)				// 전역변수에 추가
+	PrintResult(&resultData)
+	/** 코드 퍼포먼스를 위해 중복제거(removeDuplicates)는 마지막에 실행하도록 한다 */
 	return resultData
 }
 

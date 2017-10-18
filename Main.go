@@ -4,8 +4,8 @@ import Console "fmt"
 import (
 	Runtime "runtime"
 	"./Parser"
-	"strings"
-	"strconv"
+	Strings "strings"
+	Strconv "strconv"
 )
 
 func main() {
@@ -16,11 +16,11 @@ func main() {
 	Console.Print("사이트 주소(쉼표로 구분) : ")
 	var inputData string
 	Console.Scan(&inputData)
-	var urls []string = strings.Split(inputData, ",")
+	var urls []string = Strings.Split(inputData, ",")
 
 	var i int
 	for i = 0; i < 100; i++ {
-		urls = append(urls, "https://sir.kr/qa/p" + strconv.Itoa(i) + "?s_tag=%EA%B7%B8%EB%88%84%EB%B3%B4%EB%93%9C5")
+		urls = append(urls, "https://sir.kr/qa/p" + Strconv.Itoa(i) + "?s_tag=%EA%B7%B8%EB%88%84%EB%B3%B4%EB%93%9C5")
 	}
 
 	for _, url := range urls {
