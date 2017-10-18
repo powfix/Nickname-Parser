@@ -1,19 +1,18 @@
 package main
 
 import Console "fmt"
-import (
-	Runtime "runtime"
-	"./Parser"
-	//Strings "strings"
-	Strconv "strconv"
-	Sync "sync"
-	FIle "./File"
-)
+import Runtime "runtime"
+import "./Parser"
+import Strconv "strconv"
+import Sync "sync"
+import FIle "./File"
 
 var resultData = Parser.ResultData{}
 func main() {
 	// Multiple CPU Processing
-	Runtime.GOMAXPROCS(4)
+	Runtime.GOMAXPROCS(Runtime.NumCPU())
+	Console.Printf("※ CPU(%d), GoLotine(%d)\n", Runtime.NumCPU(), Runtime.NumGoroutine())
+
 
 	//Console.Println("[Nicname Parser]")
 	//Console.Print("사이트 주소(쉼표로 구분) : ")
