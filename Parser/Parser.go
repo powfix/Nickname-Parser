@@ -5,7 +5,10 @@ import HTTP "net/http"
 import Scrape "github.com/yhat/scrape"
 import HTML "golang.org/x/net/html"
 import Atom "golang.org/x/net/html/atom"
-import Regexp "regexp"
+import (
+	Regexp "regexp"
+	"strings"
+)
 
 type ResultData struct {							// 결괏값 구조체
 	result []string							// 닉네임 배열
@@ -80,12 +83,12 @@ func GetNickName(root *HTML.Node) ResultData {
 	/** Count reset */
 	var resultData = ResultData{totalCount: 0, includeCount: 0, excludeCount: 0}
 	for _, article := range articles {
-		text := Scrape.Text(article)
+		text := strings.Trim(Scrape.Text(article), ". ")							// Trim(좌우 공백 또는 점 제거)
 		hasKorean, _ := Regexp.MatchString("[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]", text)		// 한글이 포함되어 있는가
 		hasEnglish, _ := Regexp.MatchString("[a-z A-Z]", text)					// 영문이 포함되어 있는가
 		hasNumber, _ := Regexp.MatchString("[0-9]", text)						// 숫자가 포함되어 있는가
 		if hasKorean && !hasEnglish && !hasNumber {										// 한글이 포함되어 있고 영문과 숫자가 포함되어 있지 않을 경우
-			resultData.result = append(resultData.result, Scrape.Text(article))			// ResultData(Local) 변수의 슬라이스에 추가
+			resultData.result = append(resultData.result, text)			// ResultData(Local) 변수의 슬라이스에 추가
 			resultData.includeCount++
 		} else {
 			resultData.excludeCount++
@@ -96,6 +99,10 @@ func GetNickName(root *HTML.Node) ResultData {
 	return resultData
 }
 
+/**
+ * 2017-10-18 Create by KKM
+ * Delete duplicate element in slice
+ */
 func removeDuplicates(strings []string) []string {
 	encountered := map[string]bool{}
 	for i:= range strings {
