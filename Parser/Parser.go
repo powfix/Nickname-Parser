@@ -50,8 +50,8 @@ func PrintResult(resultData *ResultData) {
 	for i, text := range resultData.result {
 		Console.Printf("%03d %s\n", i, text) // Console 표시 ex) "27 은하수"
 	}
-	Console.Printf("※ 결괏값 : 전체(%d), 추가(%d), 정규식 제외(%d), 중복 제외(%d)\n", resultData.GetTotalCount(), resultData.GetIncludeCount(),resultData.GetExcludeCount(), resultData.includeCount - len(resultData.result))
-	Console.Printf("※ 유효한 닉네임 : %d개\n\n", len(resultData.result))
+	Console.Printf("※ 결괏값 : 전체(%d), 추가(%d), 정규식 제외(%d), 중복 제외(%d)\n\n", resultData.GetTotalCount(), resultData.GetIncludeCount(),resultData.GetExcludeCount(), resultData.includeCount - len(resultData.result))
+	Console.Printf("※ 유효한 닉네임 : %d개", len(resultData.result))
 }
 
 func GetHtmlBody(url string) *HTML.Node {

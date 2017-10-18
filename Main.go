@@ -7,6 +7,7 @@ import (
 	//Strings "strings"
 	Strconv "strconv"
 	Sync "sync"
+	FIle "./File"
 )
 
 var resultData = Parser.ResultData{}
@@ -23,11 +24,12 @@ func main() {
 	var taskLimit int = 10
 	var wait Sync.WaitGroup
 	wait.Add(taskLimit)
-	for i := 1; i < 60; i++ {
+	for i := 1; i < 4758; i++ {
 		cnt++
 		go func() {
 			defer wait.Done()
-			tmp := Parser.GetNickName(Parser.GetHtmlBody("https://sir.kr/qa/p" + Strconv.Itoa(i) + "?unanswered"))
+			//tmp := Parser.GetNickName(Parser.GetHtmlBody("https://sir.kr/qa/p" + Strconv.Itoa(i) + "?unanswered"))
+			tmp := Parser.GetNickName(Parser.GetHtmlBody("https://sir.kr/cm_free/p" + Strconv.Itoa(i)))
 			resultData.Append(&tmp)
 		}()
 		if cnt > taskLimit {
@@ -41,4 +43,5 @@ func main() {
 	Console.Println("※ 작업이 완료되었습니다")
 	resultData.RemoveDuplicate()
 	Parser.PrintResult(&resultData)
+	FIle.WriteIntoFile(FIle.SliceStringToCsvString(resultData.GetResult()))
 }
