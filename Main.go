@@ -3,22 +3,29 @@ package main
 import Console "fmt"
 import (
 	Runtime "runtime"
-	Parser "./Parser"
+	"./Parser"
+	"strings"
+	"strconv"
 )
 
 func main() {
 	// Multiple CPU Processing
 	Runtime.GOMAXPROCS(4)
 
-	urls := []string{}
-	urls = append(urls, "https://sir.kr/qa/?s_tag=%EA%B7%B8%EB%88%84%EB%B3%B4%EB%93%9C5")
-	urls = append(urls, "https://sir.kr/qa/p2?s_tag=%EA%B7%B8%EB%88%84%EB%B3%B4%EB%93%9C5")
-	//urls = append(urls, "https://sir.kr/qa/p3?s_tag=%EA%B7%B8%EB%88%84%EB%B3%B4%EB%93%9C5")
-	//urls = append(urls, "https://sir.kr/qa/p4?s_tag=%EA%B7%B8%EB%88%84%EB%B3%B4%EB%93%9C5")
-	//urls = append(urls, "https://sir.kr/qa/p5?s_tag=%EA%B7%B8%EB%88%84%EB%B3%B4%EB%93%9C5")
+	Console.Println("[Nicname Parser]")
+	Console.Print("사이트 주소(쉼표로 구분) : ")
+	var inputData string
+	Console.Scan(&inputData)
+	var urls []string = strings.Split(inputData, ",")
+
+	var i int
+	for i = 0; i < 100; i++ {
+		urls = append(urls, "https://sir.kr/qa/p" + strconv.Itoa(i) + "?s_tag=%EA%B7%B8%EB%88%84%EB%B3%B4%EB%93%9C5")
+	}
 
 	for _, url := range urls {
 		Console.Println(url)
 		Parser.GetNickName(Parser.GetHtmlBody(url))
 	}
+
 }
