@@ -6,7 +6,7 @@ import Scrape "github.com/yhat/scrape"
 import HTML "golang.org/x/net/html"
 import Atom "golang.org/x/net/html/atom"
 import (
-	Regexp "regexp"
+	//Regexp "regexp"
 	"strings"
 )
 
@@ -50,7 +50,8 @@ func (resultData *ResultData) RemoveDuplicate() *ResultData {
 }
 
 func PrintResult(resultData *ResultData) {
-	for i, text := range resultData.result {
+	var i int = 1
+	for _, text := range resultData.result {
 		Console.Printf("%03d %s\n", i, text) // Console 표시 ex) "27 은하수"
 	}
 	Console.Printf("※ 결괏값 : 전체(%d), 추가(%d), 정규식 제외(%d), 중복 제외(%d)\n\n", resultData.GetTotalCount(), resultData.GetIncludeCount(),resultData.GetExcludeCount(), resultData.includeCount - len(resultData.result))
@@ -84,10 +85,10 @@ func GetNickName(root *HTML.Node) ResultData {
 	var resultData = ResultData{totalCount: 0, includeCount: 0, excludeCount: 0}
 	for _, article := range articles {
 		text := strings.Trim(Scrape.Text(article), ". ")							// Trim(좌우 공백 또는 점 제거)
-		hasKorean, _ := Regexp.MatchString("[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]", text)		// 한글이 포함되어 있는가
-		hasEnglish, _ := Regexp.MatchString("[a-z A-Z]", text)					// 영문이 포함되어 있는가
-		hasNumber, _ := Regexp.MatchString("[0-9]", text)						// 숫자가 포함되어 있는가
-		if hasKorean && !hasEnglish && !hasNumber {										// 한글이 포함되어 있고 영문과 숫자가 포함되어 있지 않을 경우
+		//hasKorean, _ := Regexp.MatchString("[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]", text)		// 한글이 포함되어 있는가
+		//hasEnglish, _ := Regexp.MatchString("[a-z A-Z]", text)					// 영문이 포함되어 있는가
+		//hasNumber, _ := Regexp.MatchString("[0-9]", text)						// 숫자가 포함되어 있는가
+		if true {										// 한글이 포함되어 있고 영문과 숫자가 포함되어 있지 않을 경우
 			resultData.result = append(resultData.result, text)			// ResultData(Local) 변수의 슬라이스에 추가
 			resultData.includeCount++
 		} else {

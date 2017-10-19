@@ -13,7 +13,7 @@ func main() {
 	Runtime.GOMAXPROCS(Runtime.NumCPU())
 	Console.Printf("※ CPU(%d), GoLotine(%d)\n", Runtime.NumCPU(), Runtime.NumGoroutine())
 	
-	var totalCount, i, cnt, taskLimit uint = 0, 0, 0, 12
+	var totalCount, i, cnt, taskLimit uint = 0, 0, 0, 4
 	var wait Sync.WaitGroup
 
 	for i = 1; i < 120; i++ {
